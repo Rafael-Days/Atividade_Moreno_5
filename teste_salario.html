@@ -1,47 +1,61 @@
-<script>
-	var frase = ['JOSE DA SILVA;PROFESSOR;2345.00;2018-06-19;1', 'ANA CARLA MORENO;MEDICA;8970.00;2007-02-15;0', 'MARCOS PAULO;CARPINTEIRO;4800.00;2013-10-19;4', 'CAMILA ANTUNES ZANARDI;COZINHEIRA;3900.54;2021-04-12;2', 'ANTONIO CAMARGO LUCCA;PROFESSOR;2980.77;2020-10-15;4', 'MARIA EDUARDA CAMARGO;MEDICO;12780.78;2022-04-28;0']
-	var dados = frase; //teste
-	var word, x;
-	var nome = [], cargo = [], salario = [], data_adimissao_mostrar = [], ndd = [];
-	var separa, quantDados;///////
+<body onload="carregarArquivo()">
+    <div id="conteudo"></div>
+	<script>
+		//var frase = ['JOSE DA SILVA;PROFESSOR;2345.00;2018-06-19;1', 'ANA CARLA MORENO;MEDICA;8970.00;2007-02-15;0', 'MARCOS PAULO;CARPINTEIRO;4800.00;2013-10-19;4', 'CAMILA ANTUNES ZANARDI;COZINHEIRA;3900.54;2021-04-12;2', 'ANTONIO CAMARGO LUCCA;PROFESSOR;2980.77;2020-10-15;4', 'MARIA EDUARDA CAMARGO;MEDICO;12780.78;2022-04-28;0']
+		var frase = []; //teste
+		var word, x;
+		var nome = [], cargo = [], salario = [], data_adimissao_mostrar = [], ndd = [];
+		var quantDados;///////
 
-	function separar() {
-		separa = dados.split(',');
-
-	}
-
-	function leitura() {
-		quantDados = frase.length;
-
-		for (x = 0; x < quantDados; x++) {
-
-			word = frase[x].split(';');
-			nome[x] = word[0];
-			cargo[x] = word[1];
-			salario[x] = word[2];
-			//data_adimissao[x] = word[3];
-			data_adimissao_mostrar[x] = word[3];
-			ndd[x] = word[4];
-			//console.log("a");
+		function carregarArquivo() {
+			fetch('infos.txt')
+                .then(response => response.text())
+                .then(texto => {
+                    frase = texto.split(',');
+                    leitura();
+                    mostrar();
+                })
+                .catch(error => {
+                    console.log('Ocorreu um erro ao carregar o arquivo:', error);
+                });
 		}
-	}
 
-	function mostrar() {
 
-		for (x = 0; x < quantDados; x++) {
-			document.write("Nome: " + nome[x]);
-			document.write("<br>Cargo: " + cargo[x]);
-			document.write("<br>Salario: " + salario[x]);
-			document.write("<br>Data Adimissão: " + data_adimissao_mostrar[x]);
-			document.write("<br>NUMERO DE DEPENDENTES: " + ndd[x] + "<br> <br>");
-			//document.write("<br>"+ dia + "/" + mes + "/" + ano);
-			//document.write("<br>Tempo trabalhado: " + tempo_trab + " Anos.");
+		function leitura() {
+			quantDados = frase.length;
+
+			for (x = 0; x < quantDados; x++) {
+
+				word = frase[x].split(';');
+				nome[x] = word[0];
+				cargo[x] = word[1];
+				salario[x] = word[2];
+				//data_adimissao[x] = word[3];
+				data_adimissao_mostrar[x] = word[3];
+				ndd[x] = word[4];
+			}
 		}
-	}
 
-	//separar();
-	//document.write(separa);
-	leitura();
-	//console.log("deu bom");
-	mostrar();
-</script>
+		function mostrar() {
+
+			for (x = 0; x < quantDados; x++) {
+				document.write("Nome: " + nome[x]);
+				document.write("<br>Cargo: " + cargo[x]);
+				document.write("<br>Salario: " + salario[x]);
+				document.write("<br>Data Adimissão: " + data_adimissao_mostrar[x]);
+				document.write("<br>NUMERO DE DEPENDENTES: " + ndd[x] + "<br> <br>");
+				//document.write("<br>"+ dia + "/" + mes + "/" + ano);
+				//document.write("<br>Tempo trabalhado: " + tempo_trab + " Anos.");
+			}
+		}
+
+
+		carregarArquivo();
+		//separar();
+		//document.write(separa);
+		//leitura();
+		//console.log("deu bom");
+		//mostrar();
+	</script>
+
+</body>
