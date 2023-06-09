@@ -1,0 +1,77 @@
+<script>
+	var frase = ['JOSE DA SILVA;PROFESSOR;2345.00;2018-06-19;1', 'ANA CARLA MORENO;MEDICA;8970.00;2007-02-15;0', 'MARCOS PAULO;CARPINTEIRO;4800.00;2013-10-19;4', 'CAMILA ANTUNES ZANARDI;COZINHEIRA;3900.54;2021-04-12;2', 'ANTONIO CAMARGO LUCCA;PROFESSOR;2980.77;2020-10-15;4', 'MARIA EDUARDA CAMARGO;MEDICO;12780.78;2022-04-28;0']
+	//var frase = ['JOSE DA SILVA;PROFESSOR;2345.00;2016-06-19;2;ANA CARLA MORENO;MEDICA;8970.00;2007-02-15;0']
+	var dados = frase;
+	var word, x, quantDados, data_adimissao = [], alarioMostrar, salarioFormatado;
+	var nome = [], cargo = [], salario = [], data_adimissao_mostrar = [], ndd = [];
+	var dia, mes, ano, tempo_trab = [];;
+
+	quantDados = frase.length;
+
+	function leitura() {
+
+		for (x = 0; x < quantDados; x++) {
+			word = frase[x].split(';');
+			nome[x] = word[0];
+			cargo[x] = word[1];
+			salario[x] = word[2];
+			data_adimissao[x] = word[3];
+			//data_adimissao_mostrar[x] = word[3];
+			ndd[x] = word[4];
+		}
+	}
+
+
+	function calcularTempo(data_adimissao) {
+		var hoje = new Date();
+
+		for (x = 0; x < quantDados; x++) {
+			inicio_trab = new Date(data_adimissao[x]);
+			tempo_trab[x] = hoje.getFullYear() - inicio_trab.getFullYear();
+			
+			if (hoje < new Date(hoje.getFullYear(), inicio_trab.getMonth(), inicio_trab.getDate())) {
+				tempo_trab[x]--;
+			}
+		}
+		return tempo_trab[x];
+		
+	}
+
+
+	function reajuste() {
+
+		for (x = 0; x < quantDados; x++) {
+			tempo_trab[x] = calcularTempo(data_adimissao);
+			if (cargo[x] == 'PROFESSOR') {
+				salario[x] = salario[x] * 1.09;
+			} else if (tempo_trab[x] >= 5 && ndd[x] > 0) {
+				salario[x] = (salario[x] * 1.075) * ((ndd[x] * 0.012) + 1);
+			} else if (tempo_trab[x] >= 5) {
+				salario[x] = salario[x] * 1.075;
+			} else if (ndd[x] > 0) {
+				salario[x] = salario[x] * ((ndd[x] * 0.012) + 1);
+			}
+		}
+
+	}
+
+	function mostrar() {
+		//salarioFormatado = salario.toFixed(2);
+		//salarioMostrar = parseFloat(salarioFormatado);
+
+		for (x = 0; x < quantDados; x++) {
+			document.write("Nome: " + nome[x]);
+			document.write("<br>Cargo: " + cargo[x]);
+			document.write("<br>Salario: " + salario[x]);
+			document.write("<br>Data Adimissão: " + data_adimissao[x]);
+			document.write("<br>NUMERO DE DEPENDENTES: " + ndd[x]);
+			document.write("<br>Tempo trabalhado: " + tempo_trab[x] + " Anos." + "<br> <br>");
+		}
+	}
+
+
+	leitura();
+	reajuste();
+	mostrar();
+
+</script>
